@@ -4,6 +4,7 @@
 
 #define MAX_PERSONNES 50
 #define MAX_CHAINE 30
+#define MAX_COMPTES 50
 
 typedef struct{
   char nom[MAX_CHAINE];
@@ -12,8 +13,16 @@ typedef struct{
   char email[MAX_CHAINE];
 } Personne;
 
+typedef struct{
+  char titulaire[MAX_CHAINE];
+  char numeroCompte[20];
+  float solde;
+} CompteBancaire;
+
 Personne repertoire[MAX_PERSONNES];
+CompteBancaire comptes[MAX_COMPTES];
 int nbPersonnes = 0;
+int nbComptes = 0;
 
 void Creer_Enregistrement(){
   if(nbPersonnes >=MAX_PERSONNES){
@@ -101,17 +110,87 @@ void compter_nbPersonnes(){
   printf("Il y a actuellement %d personnes dans le répertoire\n", nbPersonnes);
 }
 
+void Creer_Compte(){
+  if(nbComptes >= MAX_COMPTES){
+    printf("Le nombre maximum de comptes a été atteint\n");
+    return;
+  }
+  printf("Création d'un nouveau compte bancaire :\n");
+  printf("Titulaire : \n");
+  scanf("%s", comptes[nbComptes].titulaire);
+  printf("Numéro de compte : ");
+  scanf("%s", comptes[nbComptes].numeroCompte);
+  comptes[nbComptes].solde = 0.0;
+  nbComptes++;
+  printf("Compte créé avec succès !\n");
+}
+
+void Afficher_Compte() {
+    char numeroCompte[20];
+    printf("Entrez le numéro de compte à afficher : ");
+    scanf("%s", numeroCompte);
+    for (int i = 0; i < nbComptes; i++) {
+        if (strcmp(comptes[i].numeroCompte, numeroCompte) == 0) {
+            printf("Informations du compte :\n");
+            printf("Titulaire : %s\n", comptes[i].titulaire);
+            printf("Numéro de compte : %s\n", comptes[i].numeroCompte);
+            printf("Solde : %.2f\n", comptes[i].solde);
+            return;
+        }
+    }
+    printf("Compte non trouvé.\n");
+}
+
+void Depot() {
+    char numeroCompte[20];
+    float montant;
+    printf("Entrez le numéro de compte pour le dépôt : ");
+    scanf("%s", numeroCompte);
+    printf("Entrez le montant à déposer : ");
+    scanf("%f", &montant);
+    for (int i = 0; i < nbComptes; i++) {
+        if (strcmp(comptes[i].numeroCompte, numeroCompte) == 0) {
+            comptes[i].solde += montant;
+            printf("Dépôt effectué. Nouveau solde : %.2f\n", comptes[i].solde);
+            return;
+        }
+    }
+    printf("Compte non trouvé.\n");
+}
+
+void Retrait() {
+    char numeroCompte[20];
+    float montant;
+    printf("Entrez le numéro de compte pour le retrait : ");
+    scanf("%s", numeroCompte);
+    printf("Entrez le montant à retirer : ");
+    scanf("%f", &montant);
+    for (int i = 0; i < nbComptes; i++) {
+        if (strcmp(comptes[i].numeroCompte, numeroCompte) == 0) {
+            if (comptes[i].solde >= montant) {
+                comptes[i].solde -= montant;
+                printf("Retrait effectué. Nouveau solde : %.2f\n", comptes[i].solde);
+            } else {
+                printf("Fonds insuffisants.\n");
+            }
+            return;
+        }
+    }
+    printf("Compte non trouvé.\n");
+}
+
 int main(){
   int Action;
   while(1){
     printf("Quelle action voulez-vous faire ? :\n");
-    printf("*Ajouter une personne    (1)\n");
-    printf("*Afficher le répertoire  (2)\n");
-    printf("*Rechercher une personne (3)\n");
-    printf("*Retirer une personne    (4)\n");
-    printf("*Triez le répertoire     (5)\n");
-    printf("*Compter personne        (6)\n");
-    printf("*Terminer                (7)\n");
+    printf("*Ajouter une personne        (1)\n");
+    printf("*Afficher le répertoire      (2)\n");
+    printf("*Rechercher une personne     (3)\n");
+    printf("*Retirer une personne        (4)\n");
+    printf("*Triez le répertoire         (5)\n");
+    printf("*Compter personne            (6)\n");
+    printf("*Gérer les comptes bancaires (7)\n");
+    printf("*Terminer                    (8)\n");
     printf("Votre choix : ");
     scanf("%d", &Action);
 
@@ -134,10 +213,30 @@ int main(){
       compter_nbPersonnes();
     }
     else if (Action == 7){
+      int gestionComptes;
+      printf("Que voulez-vous faire avec les comptes bancaires ? :\n");
+      printf("1. Créer un compte\n");
+      printf("2. Afficher un compte\n");
+      printf("3. Déposer de l'argent\n");
+      printf("4. Retirer de l'argent\n");
+      printf("5. Retour\n");
+      printf("Votre choix : ");
+      scanf("%d", &gestionComptes);
+      if (gestionComptes == 1) {
+	Creer_Compte();
+      } else if (gestionComptes == 2) {
+	Afficher_Compte();
+      } else if (gestionComptes == 3) {
+	Depot();
+      } else if (gestionComptes == 4) {
+	Retrait();
+      }
+    }
+    else if (Action == 8){
       break;
     }
     else{
-      printf("CHoix invalide, réessayez\n");
+      printf("Choix invalide, réessayez\n");
     }
     printf("\n");
   }
