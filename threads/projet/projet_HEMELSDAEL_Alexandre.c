@@ -7,17 +7,20 @@
 #define MAX_COMPTES 50
 
 typedef struct{
-  char nom[MAX_CHAINE];
-  char prenom[MAX_CHAINE];
-  char telephone[10];
-  char email[MAX_CHAINE];
-} Personne;
-
-typedef struct{
   char titulaire[MAX_CHAINE];
   char numeroCompte[20];
   float solde;
 } CompteBancaire;
+
+
+typedef struct{
+  char nom[MAX_CHAINE];
+  char prenom[MAX_CHAINE];
+  char telephone[10];
+  char email[MAX_CHAINE];
+  CompteBancaire comptes[MAX_PERSONNES];
+  int nbComptes;
+} Personne;
 
 Personne repertoire[MAX_PERSONNES];
 CompteBancaire comptes[MAX_COMPTES];
@@ -179,6 +182,54 @@ void Retrait() {
     printf("Compte non trouvé.\n");
 }
 
+void Virement(){
+  char compteSource[20], compteDest[20];
+  float montant;
+  int trouveSource=0, trouveDest=0;
+
+  printf("Entrez le numéro du compte source : ");
+  scanf("%s", compteSource);
+  printf("Entrez le numéro du compte destinataire : ");
+  scanf("%s", compteDest);
+  printf("Entrez le montant à transférer : ");
+  scanf("%f", &montant);
+
+  if(montant <= 0){
+    printf("Le montant du virement doit être positif.\n");
+    return;
+  }
+
+  for (int i = 0; i < nbComptes; i++) {
+    if (strcmp(comptes[i].numeroCompte, compteSource) == 0) {
+      trouveSource = 1;
+      if (comptes[i].solde < montant) {
+        printf("Solde insuffisant sur le compte source.\n");
+        return;
+      }
+      comptes[i].solde -= montant;
+    }
+
+    if (strcmp(comptes[i].numeroCompte, compteDest) == 0) {
+      trouveDest = 1;
+      comptes[i].solde += montant;
+    }
+  }
+
+  if (trouveSource && trouveDest) {
+    printf("Virement effectué avec succès !\n");
+    printf("Le nouveau solde du compte source est : %.2f\n", comptes[trouveSource].solde);
+    printf("Le nouveau solde du compte destinataire est : %.2f\n", comptes[trouveDest].solde);
+  } else {
+    if (!trouveSource) {
+      printf("Compte source non trouvé.\n");
+    }
+    if (!trouveDest) {
+      printf("Compte destinataire non trouvé.\n");
+    }
+  }
+}
+
+
 int main(){
   int Action;
   while(1){
@@ -214,22 +265,37 @@ int main(){
     }
     else if (Action == 7){
       int gestionComptes;
-      printf("Que voulez-vous faire avec les comptes bancaires ? :\n");
-      printf("1. Créer un compte\n");
-      printf("2. Afficher un compte\n");
-      printf("3. Déposer de l'argent\n");
-      printf("4. Retirer de l'argent\n");
-      printf("5. Retour\n");
-      printf("Votre choix : ");
-      scanf("%d", &gestionComptes);
-      if (gestionComptes == 1) {
-	Creer_Compte();
-      } else if (gestionComptes == 2) {
-	Afficher_Compte();
-      } else if (gestionComptes == 3) {
-	Depot();
-      } else if (gestionComptes == 4) {
-	Retrait();
+      while(1){
+	printf("Que voulez-vous faire avec les comptes bancaires ? :\n");
+	printf("1. Créer un compte\n");
+	printf("2. Afficher un compte\n");
+	printf("3. Déposer de l'argent\n");
+	printf("4. Retirer de l'argent\n");
+	printf("5. Faire un virement\n");
+	printf("6. Retour\n");
+	printf("Votre choix : ");
+	scanf("%d", &gestionComptes);
+	if (gestionComptes == 1) {
+	  Creer_Compte();
+	}
+	else if (gestionComptes == 2) {
+	  Afficher_Compte();
+	}
+	else if (gestionComptes == 3) {
+	  Depot();
+	}
+	else if (gestionComptes == 4) {
+	  Retrait();
+	}
+	else if (gestionComptes == 5){
+	  Virement();
+	}
+	else if (gestionComptes == 6){
+	  break;
+	}
+	else{
+	  printf("Choix invalide, réessayez\n");
+	}
       }
     }
     else if (Action == 8){
