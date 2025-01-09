@@ -1,0 +1,13 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_personnes 50
+#define MAX_CHAINE 30
+
+typedef struct{
+  char nom[MAX_CHAINE];
+  char prenom[MAX_CHAINE];
+  char telephone[10];
+  char email[MAX_CHAINE];
+} Personne;
