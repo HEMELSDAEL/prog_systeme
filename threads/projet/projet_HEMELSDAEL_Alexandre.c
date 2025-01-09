@@ -83,6 +83,24 @@ void Retirer(){
   printf("La personne n'a pas été trouvée dans le répertoire\n");
 }
 
+//Utilisation du tri par bulles
+void Trier_Repertoire(){
+  for(int i=0; i<nbPersonnes-1; i++){
+    for(int j=i+1; j<nbPersonnes; j++){
+      if(strcmp(repertoire[i].nom, repertoire[j].nom)>0){
+	Personne temp = repertoire[i];
+	repertoire[i] = repertoire[j];
+	repertoire[j] = temp;
+      }
+    }
+  }
+  printf("Répertoire trié par nom\n");
+}
+
+void compter_nbPersonnes(){
+  printf("Il y a actuellement %d personnes dans le répertoire\n", nbPersonnes);
+}
+
 int main(){
   int Action;
   while(1){
@@ -91,7 +109,9 @@ int main(){
     printf("*Afficher le répertoire  (2)\n");
     printf("*Rechercher une personne (3)\n");
     printf("*Retirer une personne    (4)\n");
-    printf("*Terminer                (5)\n");
+    printf("*Triez le répertoire     (5)\n");
+    printf("*Compter personne        (6)\n");
+    printf("*Terminer                (7)\n");
     printf("Votre choix : ");
     scanf("%d", &Action);
 
@@ -108,6 +128,12 @@ int main(){
       Retirer();
     }
     else if (Action == 5){
+      Trier_Repertoire();
+    }
+    else if (Action == 6){
+      compter_nbPersonnes();
+    }
+    else if (Action == 7){
       break;
     }
     else{
