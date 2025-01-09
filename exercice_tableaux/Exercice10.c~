@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main(){
+  int tab[10] = {1, 2, 2, 3, 3, 3, 4, 5, 6, 7};
+  int i, j, compteur=0;
+  int repete=0;
+
+  printf("Voici les nombres qui sont répétés dans le tableau :\n");
+  for(i=0; i<10; i++){
+    for(j=i+1; j<10; j++){
+      if(tab[i] == tab[j]){
+	printf("%d\n", tab[i]);
+	compteur = compteur + 1;
+	break;
+      }
+    }
+  }
+  if(!repete){
+    printf("Aucun nombre est répété dans ce tableau\n");
+  }
+}

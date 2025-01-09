@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int main(){
+  int i, nombre, min, max;
+
+  printf("Veuillez entrer dix nombres entiers :\n");
+  printf("Entrez le premier nombre :\n");
+  scanf("%d", &nombre);
+  max = min = nombre;
+  for(i=2; i<=10; i++){
+    printf("Entrez les autres nombres :", i);
+    scanf("%d", &nombre);
+    if(nombre > max){
+      max = nombre;
+    }
+    if(nombre < min){
+      min = nombre;
+    }
+	
+  }
+  printf("Le nombre maximum est %d : \n", max);
+  printf("Le nombre minimum est %d : \n", min);
+  
+  
+}

@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main(){
+  int tab[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  int nombre, i;
+  printf("Tapez un nombre pour savoir s'il est dans le tableau");
+  for(i=0; i<10, i++){
+    if(tab[i]==nombre){
+      printf("Le nombre est présent dans le tableau et voici son indice %d\n", i);
+    }else{
+      printf("Le nombre n'est pas présent dans le tableau");
+}

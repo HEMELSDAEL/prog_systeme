@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+int main(){
+  int tab[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  int i, tmp;
+
+  printf("Voici le tableau avant son inversion :\n");
+  for(i=0; i<10; i++){
+    printf("%d ", tab[i]);
+  }
+  printf("\n");
+
+  for(i=0; i<5; i++){
+    tmp = tab[i];
+    tab[i] = tab[9-i];
+    tab[9-i] = tmp;
+  }
+  printf("Voici le tableau après son inversion :\n");
+  for(i=0; i<10; i++){
+    printf("%d"; tab[i]);
+  }
+  printf("\n");
+  return 0;
+}

@@ -1,0 +1,17 @@
+#include <stdio.h>
+
+int main(){
+  int nombre1;
+  int fact=1;
+  printf("Veuillez entrer un nombre pour calculer le factoriel : \n");
+  scanf("%d", &nombre1);
+  if(nombre1==1){
+    printf("La valeur du factoriel est de : ", nombre1);
+  }
+  for(int i=0; i<nombre1; i++={
+      fact = fact * i;
+  }
+	return fact;
+   
+	
+}

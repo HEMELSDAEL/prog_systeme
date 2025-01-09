@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main(){
+  int km,essence;
+  int consommation;
+  printf("Veuillez entrer une distance en km : ");
+  scanf("%d", &km);
+  printf("Veuillez entrer une consommation de carburant : ");
+  scanf("%d", &essence);
+  consommation = km / consommation;
+  printf("La consommation de votre trajet est de %d : ", consommation);
+  return 0;
+  
+}

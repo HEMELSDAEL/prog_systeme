@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main(){
+  int i, j, nb_lignes;
+  printf("Entrer le nombre de lignes :");
+  scanf("%d", &nb_lignes);
+  
+}

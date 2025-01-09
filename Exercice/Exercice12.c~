@@ -1,0 +1,17 @@
+#include <stdio.h>
+
+int main(){
+  int n1, n2, n3;
+  int moyenne;
+  prinf("Veuillez entrer la première note :%d");
+  scanf("%d", &n1);
+  prinf("Veuillez entrer la seconde note :%d");
+  scanf("%d", &n2);
+  prinf("Veuillez entrer la troisième note :%d");
+  scanf("%d", &n3);
+  moyenne = (n1 + n2 + n3)/3;
+  printf("La moyenne de ces trois notes est :%d", moyenne);
+  return 0;
+  
+  
+}

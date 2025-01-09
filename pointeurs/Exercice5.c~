@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main(){
+  int tab[6] = {5, 3, 7, 9, 1, 8};
+  int *pointeur1, *pointeur2, temp;
+  int i, j;
+
+  printf("Voici le tableau avant le tri :\n");
+  for(i=0; i<6; i++){
+    printf("%d", *(tab + i));
+  }
+  printf("\n");
+
+  //tri à bulles
+
+  //Affichage du tableau après le tri
+  printf("Voici le tableau après le tri :\n");
+  for(i=0; i<6; i++){
+    printf("%d", *(tab+i));
+  }
+  printf("\n");
+  return 0;
+}

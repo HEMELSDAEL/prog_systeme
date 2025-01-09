@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main(){
+  printf("Nom :", %d\n);
+  printf("Date de naissance :", %d\n);
+  printf("Numéro de téléphone :", %d\n);
+  return 0;  
+}

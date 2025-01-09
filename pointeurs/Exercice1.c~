@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main(){
+  int *entier;
+  &entier = 2;
+  printf("La valeur de l'entier est : %d", entier);
+  return 0;
+}

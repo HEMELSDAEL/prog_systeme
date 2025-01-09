@@ -1,0 +1,10 @@
+#include <stdio.h>
+
+int main(){
+  int num1, num2;
+  int moyenne;
+  scanf("%d", "Veuillez rentrer votre premier nombre :");
+  scanf("%d", "Veuillez rentrer votre second nombre :");
+  moyenne = num1 + num2;
+  return moyenne;
+}
