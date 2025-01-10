@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_LIVRES 100
+#define MAX_EMPRUNTEURS 50
+
+typedef struct{
+  char titre[100];
+  char auteur[50];
+  int annee;
+  char isbn[20];
+  int disponible;
+} Livre;
+
+typedef struct{
+  char nom[50];
+  char prenom[50];
+  int id;
+  char emprunts[5][20];
+  int nbEmprunts;
+} Emprunteur;
