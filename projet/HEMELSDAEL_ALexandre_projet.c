@@ -81,7 +81,7 @@ void retournerLivre(Livre* tableau, int nbLivres, Emprunteur* emprunteur, char* 
 	for(int i=0; i<emprunteur->nbEmprunts;i++){
 	  if(strcmp(emprunteur->emprunts[i], isbn)==0){
 	    for(int j=i; j<emprunteur->nbEmprunts-1; j++){
-	      strcpy(emprunteur->emprunts[j], emprunteur->emprunts[j=1]);
+	      strcpy(emprunteur->emprunts[j], emprunteur->emprunts[j+1]);
 	    }
 	    emprunteur->nbEmprunts--;
 	    printf("Le livre %s a été retourné avec succès\n", ptr->titre);
@@ -116,10 +116,10 @@ void afficherEmprunts(Emprunteur* emprunteur){
 
 void afficherEmprunteursParLivre(Livre* tableau, int nbLivres, char* isbn){
   printf("\nLes emprunteurs ayant emprunté le livre avec l'ISBN %s :\n", isbn);
-  for(Livre * ptr; ptr<tableau+nbLivres; ptr++){
+  for(Livre* ptr=tableau; ptr<tableau+nbLivres; ptr++){
     if(strcmp(ptr->isbn, isbn)==0 && !ptr->disponible){
       for(int i=0; i<nbEmprunteurs; i++){
-	for(int j=0; j=emprunteurs[i].nbEmprunts; j++){
+	for(int j=0; j<emprunteurs[i].nbEmprunts; j++){
 	  if(strcmp(emprunteurs[i].emprunts[j], isbn)==0){
 	    printf("L'emprunteur s'appelle : %s %s\n", emprunteurs[i].prenom, emprunteurs[i].nom);
 	  }
@@ -170,26 +170,99 @@ void afficherTousEmprunts(Emprunteur* tableau, int nbEmprunteurs){
   }
 }
   
-  
+void afficherMenu(){
+  printf("\n----------MENU----------\n");
+  printf("1. Ajouter un livre\n");
+  printf("2. Afficher les livres disponibles\n");
+  printf("3. Emprunter un livre\n");
+  printf("4. Retourner un livre\n");
+  printf("5. Rechercher un livre\n");
+  printf("6. Afficher les emprunts d'un emprunteur\n");
+  printf("7. Afficher tous les emprunts\n");
+  printf("8. Quitter\n");
+  printf("\nChoississez une option : ");
+}
+
+void Choix(int choix){
+  char isbn[20], titre[100], auteur[50], recherche[100];
+  char nom[50], prenom[50];
+  int annee;
+  switch(choix){
+   case 1:
+     printf("Entrez le titre du livre : ");
+     fgets(titre, sizeof(titre), stdin);
+     titre[strcspn(titre, "\n")] = '\0';
+
+     printf("Entrez l'auteur : ");
+     fgets(auteur, sizeof(auteur), stdin);
+     titre[strcspn(titre, "\n")] = '\0';
+
+     printf("Entrez l'année de parution : ");
+     scanf("%d", &annee);
+     getchar();
+
+     printf("Entrez l'ISB du livre : ");
+     fgets(isbn, sizeof(isbn), stdin);
+     isbn[strcspn(isbn, "\n")] = '\0';
+
+     ajouterLivre(bibliotheque, &nbLivres, titre, auteur, annee, isbn);
+     break;
+   case 2 :
+     afficherLivresDisponibles(bibliotheque, nbLivres);
+     break;
+   case 3 :
+     printf("Entrez l'ISBN du livre à emprunter : ");
+     fgets(isbn, sizeof(isbn), stdin);
+     isbn[strcspn(isbn, "\n")] = '\0';
+     printf("Entrez le nom de l'emprunteur : ");
+     fgets(nom, sizeof(nom), stdin);
+     nom[strcspn(nom, "\n")] = '\0';
+     printf("Entrez le prénom de l'emprunteur : ");
+     fgets(prenom, sizeof(prenom), stdin);
+     prenom[strcspn(prenom, "\n")] = '\0';
+     int emprunteurId = -1;
+     for(int i=0; i<nbEmprunteurs; i++){
+       if(strcmp(emprunteurs[i].prenom, prenom) == 0 && strcmp(emprunteurs[i].nom, nom)==0){
+	 emprunteurId = i;
+	 break;
+       }
+     }
+     if(emprunteurId != -1){
+       afficherEmprunts(&emprunteurs[emprunteurId]);
+     }else{
+       printf("Emprunteur introuvable\n");
+     }
+     break;
+   case 7:
+     afficherTousEmprunts(emprunteurs, nbEmprunteurs);
+     break;
+  case 8:
+    printf("Au revoir !\n");
+    break;
+  default :
+    printf("Choix invalide \n");
+    break;
+  }
+}      
 
 int main(){
-  ajouterLivre(bibliotheque, &nbLivres, "Les Misérables", "Victor HUGO", 1862, "123456789");
-  ajouterLivre(bibliotheque, &nbLivres, "Voyage au centre de la terre", "Jules Verne", 1864, "987654321");
+  int choix;
 
-  afficherLivresDisponibles(bibliotheque, nbLivres);
   Emprunteur emprunteur1 = {"HEMELSDAEL", "Alexandre", 1, {}, 0};
   Emprunteur emprunteuse = {"COLLIN", "Garance", 2, {}, 0};
   emprunteurs[0] = emprunteur1;
   emprunteurs[1] = emprunteuse;
   nbEmprunteurs = 2;
+  
+  ajouterLivre(bibliotheque, &nbLivres, "Les Misérables", "Victor HUGO", 1862, "123456789");
+  ajouterLivre(bibliotheque, &nbLivres, "Voyage au centre de la terre", "Jules Verne", 1864, "987654321");
 
-  emprunterLivre(bibliotheque, nbLivres, &emprunteurs[0], "123456789");
-  afficherLivresDisponibles(bibliotheque, nbLivres);
-  rechercherLivre(bibliotheque, nbLivres, "Les Misérables");
-  afficherEmprunts(&emprunteurs[0]);
-  retournerLivre(bibliotheque, nbLivres, &emprunteurs[0], "123456789");
-  afficherLivresDisponibles(bibliotheque, nbLivres);
-  afficherEmprunts(&emprunteurs[0]);
+  do{
+    afficherMenu();
+    scanf("%d", &choix);
+    getchar();
+    Choix(choix);
+  }while(choix!=8);
 
   return 0;
 }
