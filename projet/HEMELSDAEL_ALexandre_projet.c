@@ -1,32 +1,32 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_LIVRES 100
-#define MAX_EMPRUNTEURS 50
+#define MAX_LIVRES 100 //Maximum de livre dans la bibliothèque
+#define MAX_EMPRUNTEURS 50 //Maximum d'emprunteur dans la bibliothèque
 
 typedef struct{
-  char titre[100];
-  char auteur[50];
-  int annee;
-  char isbn[20];
-  int disponible;
-} Livre;
+  char titre[100];//titre du livre
+  char auteur[50];//Auteur du livre
+  int annee;//Année de parution du livre
+  char isbn[20];//Numéro ISBN du livre
+  int disponible;//disponibilité (1 = oui, 0 = non)
+} Livre;//Représente la structure d'un livre
 
 typedef struct{
-  char nom[50];
-  char prenom[50];
-  int id;
-  char emprunts[5][20];
-  int nbEmprunts;
-} Emprunteur;
+  char nom[50];//Nom de l'emprunteur
+  char prenom[50];//Prénom de l'emprunteur
+  int id;//Id unique de l'emprunteur
+  char emprunts[5][20];//ISBN des livres empruntés (maximum 5 livres)
+  int nbEmprunts;//Nombre de livre actuellement empruntés
+} Emprunteur;//Représente la structure d'un emprunteur à la bibliothèque
 
-Livre bibliotheque[MAX_LIVRES];
-Emprunteur emprunteurs[MAX_EMPRUNTEURS];
-int nbLivres = 0;
-int nbEmprunteurs = 0;
+Livre bibliotheque[MAX_LIVRES];//Tableau contenant les livres
+Emprunteur emprunteurs[MAX_EMPRUNTEURS];//Tableau contenant les emprunteurs
+int nbLivres = 0;//Nombre de livres dans la bibliothèque
+int nbEmprunteurs = 0;//Nombre d'emprunteurs inscrits
 
 
-void ajouterLivre(Livre* tableau, int* nbLivre, char* titre, char* auteur, int annee, char* isbn){
+void ajouterLivre(Livre* tableau, int* nbLivre, char* titre, char* auteur, int annee, char* isbn){//Fonction qui va ajouter un livre à la biblitohèque avec ses caractéristiques
   if(nbLivres >= MAX_LIVRES){
     printf("\nLa bibliothèque est pleine. On ne peut plus stocker de livres\n");
     return;
@@ -42,6 +42,7 @@ void ajouterLivre(Livre* tableau, int* nbLivre, char* titre, char* auteur, int a
   printf("Livre ajouté avec succès : %s\n", titre);
 }
 
+//Affiche la liste des livres disponibles avant l'emprunt
 void afficherLivresDisponibles(Livre* tableau, int nbLivres){
   printf("\nLivres disponibles: \n");
   for(Livre* ptr=tableau; ptr<tableau+nbLivres; ptr++){
@@ -51,6 +52,7 @@ void afficherLivresDisponibles(Livre* tableau, int nbLivres){
   }
 }
 
+//Permet à l'emprunteur d'emprunter un livre qui est disponible dans la bibliothèque
 void emprunterLivre(Livre* tableau, int nblivres, Emprunteur* emprunteur, char* isbn){
   for(Livre* ptr=tableau; ptr<tableau+nblivres; ptr++){
     if(strcmp(ptr->isbn, isbn) == 0){
@@ -73,6 +75,7 @@ void emprunterLivre(Livre* tableau, int nblivres, Emprunteur* emprunteur, char* 
    printf("Le livre avec l'ISBN %s est introuvable\n", isbn);
 }
 
+//Permet à l'emprunteur de retourner un livre qu'il a emprunté
 void retournerLivre(Livre* tableau, int nbLivres, Emprunteur* emprunteur, char* isbn){
   for(Livre* ptr=tableau; ptr<tableau+nbLivres; ptr++){
     if(strcmp(ptr->isbn, isbn)==0){
@@ -94,6 +97,7 @@ void retournerLivre(Livre* tableau, int nbLivres, Emprunteur* emprunteur, char* 
   printf("Le livre avec l'ISBN %s n'est pas emprunté ou il est introuvable\n", isbn);
 }
 
+//Recherche un livre en fonction du titre ou de l'auteur
 void rechercherLivre(Livre* tableau, int nbLivres, char* recherche){
   printf("\nVoici les résultats de la recherche pour le livre recherché \"%s\" :\n", recherche);
   for(Livre* ptr=tableau; ptr<tableau+nbLivres; ptr++){
@@ -103,6 +107,7 @@ void rechercherLivre(Livre* tableau, int nbLivres, char* recherche){
   }
 }
 
+//Affiche la liste des livres empruntés en fonction du nom et prénom de l'emprunteur
 void afficherEmprunts(Emprunteur* emprunteur){
   printf("\nLivres empruntés par %s %s :\n", emprunteur->prenom, emprunteur->nom);
   if(emprunteur->nbEmprunts==0){
@@ -114,6 +119,7 @@ void afficherEmprunts(Emprunteur* emprunteur){
   }
 }
 
+//Affiche la la liste des empruntés ayant emprunté un livre spécifique en fonction du titre du livre
 void afficherEmprunteursParLivre(Livre* tableau, int nbLivres, char* isbn){
   printf("\nLes emprunteurs ayant emprunté le livre avec l'ISBN %s :\n", isbn);
   for(Livre* ptr=tableau; ptr<tableau+nbLivres; ptr++){
@@ -129,7 +135,7 @@ void afficherEmprunteursParLivre(Livre* tableau, int nbLivres, char* isbn){
   }
 }
 
-
+//Supprime un livre de la bibliothèque
 void supprimerLivre(Livre* tableau, int* nbLivres, char* isbn){
   for(int i=0; i<*nbLivres; i++){
     if(strcmp(tableau[i].isbn, isbn)==0){
@@ -144,6 +150,7 @@ void supprimerLivre(Livre* tableau, int* nbLivres, char* isbn){
   printf("Le livre avec l'ISBN %s n'a pas été trouvé\n", isbn);
 }
 
+//Ajoute un emprunteur à la bibliothèque
 void inscrireEmprunteur(Emprunteur* tableau, int* nbEmprunteurs, char* nom, char* prenom){
   if(*nbEmprunteurs >= MAX_EMPRUNTEURS){
     printf("Impossible d'ajouter un nouvel emprunteur, la limite a été atteinte\n");
@@ -160,6 +167,7 @@ void inscrireEmprunteur(Emprunteur* tableau, int* nbEmprunteurs, char* nom, char
   printf("Le nouvel emprunteur a été ajouté avec succès : %s %s\n",nom, prenom);
 }
 
+//Affiche la liste des emprunts de tous les emprunteurs de la bibliothèque
 void afficherTousEmprunts(Emprunteur* tableau, int nbEmprunteurs){
   printf("\nLa liste des emprunts de tous les emprunteurs :\n");
   for(int i=0; i<nbEmprunteurs; i++){
@@ -170,6 +178,7 @@ void afficherTousEmprunts(Emprunteur* tableau, int nbEmprunteurs){
   }
 }
 
+//Affiche la liste des emprunteurs inscrits
 void afficherEmprunteurs(Emprunteur* tableau, int nbEmprunteurs){
   printf("\nLa liste des emprunteurs :\n");
   for(int i=0; i<nbEmprunteurs; i++){
@@ -177,7 +186,7 @@ void afficherEmprunteurs(Emprunteur* tableau, int nbEmprunteurs){
   }
 }
 
-
+//Supprime un emprunteur de la bibliothèque
 void supprimerEmprunteur(Emprunteur* tableau, int* nbEmprunteurs, int id){
   for(int i=0; i<*nbEmprunteurs; i++){
     if(tableau[i].id == id){
@@ -191,7 +200,8 @@ void supprimerEmprunteur(Emprunteur* tableau, int* nbEmprunteurs, int id){
   }
   printf("L'emprunteur avec l'ID %d n'a pas été trouvé\n", id);
 }
-  
+
+//Affiche un menu interactif pour l'utilisateur
 void afficherMenu(){
   printf("\n----------MENU----------\n");
   printf("1. Ajouter un livre\n");
@@ -208,6 +218,7 @@ void afficherMenu(){
   printf("\nChoississez une option : ");
 }
 
+//Permet d'exécuter l'action correspondante au choix de l'utilisateur
 void Choix(int choix){
   char isbn[20], titre[100], auteur[50], recherche[100];
   char nom[50], prenom[50];
