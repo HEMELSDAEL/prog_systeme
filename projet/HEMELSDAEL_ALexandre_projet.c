@@ -21,14 +21,14 @@ typedef struct{
 } Emprunteur;
 
 Livre bibliotheque[MAX_LIVRES];
-Utilisateur utilisateurs[MAX_EMPRUNTEURS];
+Emprunteur emprunteur[MAX_EMPRUNTEURS];
 int nbLivres = 0;
 int nbEmprunteurs = 0;
 
 
 void ajouterLivre(Livre* tableau, int* nbLivre, char* titre, char* auteur, int annee, char* isbn){
-  if(*nbLivres >= MAX_LIVRES){
-    printf("La bibliothèque est pleine. On ne peut plus stocker de livres\n");
+  if(nbLivres >= MAX_LIVRES){
+    printf("\nLa bibliothèque est pleine. On ne peut plus stocker de livres\n");
     return;
   }
   Livre nouveauLivre;
@@ -37,15 +37,15 @@ void ajouterLivre(Livre* tableau, int* nbLivre, char* titre, char* auteur, int a
   nouveauLivre.annee = annee;
   strcpy(nouveauLivre.isbn, isbn);
   nouveauLivre.disponible = 1;
-  tableau[*nbLivres]=nouveauLivre;
-  (*nbLivres)++;
+  tableau[nbLivres]=nouveauLivre;
+  (nbLivres)++;
   printf("Livre ajouté avec succès : %s\n", titre);
 }
 
 void afficherLivresDisponibles(Livre* tableau, int nbLivres){
-  printf("\nLivres disponibles :\n");
-  for(Livre* ptr=tableau; ptr<tableau+nblivres; ptr++){
-    if(ptr->disponbile){
+  printf("\nLivres disponibles: \n");
+  for(Livre* ptr=tableau; ptr<tableau+nbLivres; ptr++){
+    if(ptr->disponible){
       printf("Titre : %s, Auteur : %s, Année : %d, ISBN : %s\n", ptr->titre, ptr->auteur, ptr->annee, ptr->isbn);
     }
   }
@@ -59,7 +59,7 @@ void emprunterLivre(Livre* tableau, int nblivres, Emprunteur* emprunteur, char* 
 	  ptr->disponible=0;
 	  strcpy(emprunteur->emprunts[emprunteur->nbEmprunts], isbn);
 	  emprunteur->nbEmprunts++;
-	  printf("Le livre %s a été emprunté avec succès \n", ptr->titre);
+	  printf("\nLe livre %s a été emprunté avec succès \n", ptr->titre);
 	}else{
 	  printf("L'emprunteur a déjà emprunté 5 livres. Ce qui est la limite d'emprunt\n");
 	}
