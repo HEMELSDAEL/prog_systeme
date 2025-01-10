@@ -169,6 +169,28 @@ void afficherTousEmprunts(Emprunteur* tableau, int nbEmprunteurs){
     }
   }
 }
+
+void afficherEmprunteurs(Emprunteur* tableau, int nbEmprunteurs){
+  printf("\nLa liste des emprunteurs :\n");
+  for(int i=0; i<nbEmprunteurs; i++){
+    printf("ID : %d, Nom : %s, Prénom : %s\n", tableau[i].id, tableau[i].nom, tableau[i].prenom);
+  }
+}
+
+
+void supprimerEmprunteur(Emprunteur* tableau, int* nbEmprunteurs, int id){
+  for(int i=0; i<*nbEmprunteurs; i++){
+    if(tableau[i].id == id){
+      for(int j=i; j<*nbEmprunteurs-1; j++){
+	tableau[j] = tableau[j+1];
+      }
+      (*nbEmprunteurs)--;
+      printf("L'emprunteur avec l'ID %d a été supprimé\n", id);
+      return;
+    }
+  }
+  printf("L'emprunteur avec l'ID %d n'a pas été trouvé\n", id);
+}
   
 void afficherMenu(){
   printf("\n----------MENU----------\n");
@@ -179,14 +201,17 @@ void afficherMenu(){
   printf("5. Rechercher un livre\n");
   printf("6. Afficher les emprunts d'un emprunteur\n");
   printf("7. Afficher tous les emprunts\n");
-  printf("8. Quitter\n");
+  printf("8. Ajouter un emprunteur\n");
+  printf("9. Afficher tous les emprunteurs\n");
+  printf("10. Supprimer un emprunteur\n");
+  printf("11. Quitter\n");
   printf("\nChoississez une option : ");
 }
 
 void Choix(int choix){
   char isbn[20], titre[100], auteur[50], recherche[100];
   char nom[50], prenom[50];
-  int annee;
+  int annee, id;
   switch(choix){
    case 1:
      printf("Entrez le titre du livre : ");
@@ -233,26 +258,95 @@ void Choix(int choix){
        printf("Emprunteur introuvable\n");
      }
      break;
-   case 7:
-     afficherTousEmprunts(emprunteurs, nbEmprunteurs);
-     break;
+  case 4:
+    printf("Entrez l'ISBN du livre à retourner : ");
+    fgets(isbn, sizeof(isbn), stdin);
+    isbn[strcspn(isbn, "\n")] = '\0';
+          
+    printf("Entrez le prénom de l'emprunteur : ");
+    fgets(prenom, sizeof(prenom), stdin);
+    prenom[strcspn(prenom, "\n")] = '\0'; 
+            
+    printf("Entrez le nom de l'emprunteur : ");
+    fgets(nom, sizeof(nom), stdin);
+    nom[strcspn(nom, "\n")] = '\0'; 
+           
+    emprunteurId = -1;
+    for (int i = 0; i < nbEmprunteurs; i++) {
+     if (strcmp(emprunteurs[i].prenom, prenom) == 0 && strcmp(emprunteurs[i].nom, nom) == 0) {
+       emprunteurId = i;
+       break;
+     }
+    }
+            
+    if (emprunteurId != -1) {
+      retournerLivre(bibliotheque, nbLivres, &emprunteurs[emprunteurId], isbn);
+    } else {
+      printf("Emprunteur introuvable.\n");
+    }
+    break;
+    
+  case 5: 
+    printf("Entrez le titre ou l'auteur à rechercher : ");
+    fgets(recherche, sizeof(recherche), stdin);
+    recherche[strcspn(recherche, "\n")] = '\0';
+    
+    rechercherLivre(bibliotheque, nbLivres, recherche);
+    break;
+    
+  case 6: 
+    printf("Entrez le prénom de l'emprunteur : ");
+    fgets(prenom, sizeof(prenom), stdin);
+    prenom[strcspn(prenom, "\n")] = '\0';  
+    
+    printf("Entrez le nom de l'emprunteur : ");
+    fgets(nom, sizeof(nom), stdin);
+    nom[strcspn(nom, "\n")] = '\0';  
+    
+    emprunteurId = -1;
+    for (int i = 0; i < nbEmprunteurs; i++) {
+      if (strcmp(emprunteurs[i].prenom, prenom) == 0 && strcmp(emprunteurs[i].nom, nom) == 0) {
+	emprunteurId = i;
+	break;
+      }
+    }
+    
+    if (emprunteurId != -1) {
+      afficherEmprunts(&emprunteurs[emprunteurId]);
+    } else {
+      printf("Emprunteur introuvable.\n");
+    }
+	   break;
+  case 7:
+    afficherTousEmprunts(emprunteurs, nbEmprunteurs);
+    break;
   case 8:
+    printf("Entrez le prénom de l'emprunteur : ");
+    fgets(prenom, sizeof(prenom), stdin);
+    prenom[strcspn(prenom, "\n")] = '\0';
+    printf("Entrez le nom de l'emprunteur : ");
+    fgets(nom, sizeof(nom), stdin);
+    nom[strcspn(nom, "\n")] = '\0';
+    inscrireEmprunteur(emprunteurs, &nbEmprunteurs, nom, prenom);
+    break;
+  case 9:
+    afficherEmprunteurs(emprunteurs, nbEmprunteurs);
+    break;
+  case 10:
+    printf("Entrez l'ID de l'emprunteur à supprimer : ");
+    scanf("%d", &id);
+    supprimerEmprunteur(emprunteurs, &nbEmprunteurs, id);
+    break;
+  case 11:
     printf("Au revoir !\n");
     break;
-  default :
-    printf("Choix invalide \n");
-    break;
+  default:
+    printf("Votre choix est invalide. Essayez à nouveau\n");	  
   }
 }      
 
 int main(){
   int choix;
-
-  Emprunteur emprunteur1 = {"HEMELSDAEL", "Alexandre", 1, {}, 0};
-  Emprunteur emprunteuse = {"COLLIN", "Garance", 2, {}, 0};
-  emprunteurs[0] = emprunteur1;
-  emprunteurs[1] = emprunteuse;
-  nbEmprunteurs = 2;
   
   ajouterLivre(bibliotheque, &nbLivres, "Les Misérables", "Victor HUGO", 1862, "123456789");
   ajouterLivre(bibliotheque, &nbLivres, "Voyage au centre de la terre", "Jules Verne", 1864, "987654321");
@@ -262,7 +356,7 @@ int main(){
     scanf("%d", &choix);
     getchar();
     Choix(choix);
-  }while(choix!=8);
+  }while(choix!=11);
 
   return 0;
 }
